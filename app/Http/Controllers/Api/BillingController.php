@@ -32,8 +32,8 @@ class BillingController extends Controller
 
         // Create the client subscription
         $tenant->newSubscription('default', $request->plan)
-                ->trialDays(14)
-                ->create($request->payment_method);
+            ->trialDays(14)
+            ->create($request->payment_method);
 
         return response()->json([
             'message' => 'Subscription created successfully',
@@ -47,27 +47,7 @@ class BillingController extends Controller
             'plan_id' => 'required|exists:plans,id',
         ]);
 
-        $newPlan = Plan::findOrFail($request->plan_id);
-        $priceId = $newPlan->stripe_price_id;
-
         // In your controller handling the change-plan request
-try {
-    // Log or debug the price ID you're using
-    \Log::info('Attempting to change to price: ' . $priceId);
-    
-    // Try to retrieve the price directly to verify it exists
-    $stripe = new \Stripe\StripeClient(config('services.stripe.secret'));
-    $price = $stripe->prices->retrieve($priceId);
-    \Log::info('Price retrieved successfully', ['price' => $price->id]);
-    
-    $user = tenant();
-    // Proceed with your change plan logic
-    $user->subscription('default')->swap($price);
-} catch (\Exception $e) {
-    \Log::error('Error changing plan: ' . $e->getMessage());
-    // Handle the error appropriately
-    return back()->withErrors(['message' => 'Unable to change plan: ' . $e->getMessage()]);
-}
 
         $tenant = tenant();
         $newPlan = Plan::findOrFail($request->plan_id);
