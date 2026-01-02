@@ -76,6 +76,12 @@ php artisan migrate
 php artisan serve
 ```
 
+### API documentation with Swagger UI
+
+```bash
+http://localhost:8000/api/documentation
+```
+
 ### Notes
 
 -   Stripe subscriptions use Stripe Price IDs
